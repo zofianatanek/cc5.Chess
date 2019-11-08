@@ -1,4 +1,5 @@
 import Cat from "../pieces/cat";
+import King from "../pieces/king";
 
 export default class Board extends Array {
   createSecondLevel() {
@@ -15,6 +16,13 @@ export default class Board extends Array {
     }
   }
 
+  createAndSetKings(side) {
+    const row = side === "white" ? 7 : 0;
+    for (let i = 0; i < 8; i++) {
+      this[row][3] = new King(row, i, side);
+    }
+  }
+
   // metoda inicjalizująca
 
   init() {
@@ -24,6 +32,7 @@ export default class Board extends Array {
 
     for (let i = 0; i < colors.length; i++) {
       this.createAndSetCats(colors[i]);
+      this.createAndSetKings(colors[i]);
     }
   }
 }
