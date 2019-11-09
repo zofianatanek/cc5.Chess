@@ -11,16 +11,12 @@ export default class Board extends Array {
   // tutaj tworzycie nowe obiekty waszych bierek i od razu umieszczacie je na szachownicy
   createAndSetCats(side) {
     const row = side === "white" ? 5 : 2;
-    for (let i = 0; i < 8; i++) {
-      this[row][4] = new Cat(row, i, side);
-    }
+    this[row][3] = new Cat(row, 3, side);
   }
 
   createAndSetKings(side) {
     const row = side === "white" ? 7 : 0;
-    for (let i = 0; i < 8; i++) {
-      this[row][3] = new King(row, i, side);
-    }
+    this[row][4] = new King(row, 4, side);
   }
 
   // metoda inicjalizująca
