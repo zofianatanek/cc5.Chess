@@ -1,6 +1,7 @@
 import Cat from "../pieces/cat";
 import King from "../pieces/king";
 import Bishop from "../pieces/bishop";
+import Queen from "../pieces/queen";
 
 export default class Board extends Array {
   createSecondLevel() {
@@ -26,6 +27,10 @@ export default class Board extends Array {
     this[row][5] = new Bishop(row, 5, side);
   }
 
+  createAndSetQueens(side) {
+    const row = side === "white" ? 7 : 0;
+    this[row][3] = new Queen(row, 3, side);
+  }
   // metoda inicjalizująca
 
   init() {
@@ -37,6 +42,7 @@ export default class Board extends Array {
       this.createAndSetCats(colors[i]);
       this.createAndSetKings(colors[i]);
       this.createAndSetBishops(colors[i]);
+      this.createAndSetQueens(colors[i]);
     }
   }
 }
