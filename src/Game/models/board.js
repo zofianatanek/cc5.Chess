@@ -2,6 +2,7 @@ import Pawn from "../pieces/pawn";
 import King from "../pieces/king";
 import Bishop from "../pieces/bishop";
 import Knight from "../pieces/knight";
+import Rook from "../pieces/rook";
 
 export default class Board extends Array {
   createSecondLevel() {
@@ -35,6 +36,12 @@ export default class Board extends Array {
     }
   }
 
+  createAndSetRooks(side) {
+    const row = side === "white" ? 7 : 0;
+    this[row][0] = new Rook(row, 0, side);
+    this[row][7] = new Rook(row, 7, side);
+  }
+
   // metoda inicjalizująca
 
   init() {
@@ -47,6 +54,7 @@ export default class Board extends Array {
       this.createAndSetKings(colors[i]);
       this.createAndSetBishops(colors[i]);
       this.createAndSetKnights(colors[i]);
+      this.createAndSetRooks(colors[i]);
     }
   }
 }
