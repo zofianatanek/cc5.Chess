@@ -23,6 +23,8 @@ export default class GameCtrl {
 
     const boardElement = this._boardModel[x][y] || null;
 
+    console.log(boardElement);
+
     boardElement ? this._getMoves(boardElement) : null;
 
     const gotBoardElement = Boolean(boardElement);
@@ -31,10 +33,9 @@ export default class GameCtrl {
     this._handleMark(boardElement);
   }
 
-  _getMoves(figure) {
-    const moves = figure.findLegalMoves(this._boardModel);
-    console.log(moves);
-    return moves;
+  _handleMark(figure) {
+    this._markedFigure = figure;
+    this._displayMoves(figure);
   }
 
   _displayMoves(figure) {
@@ -43,9 +44,10 @@ export default class GameCtrl {
     this._boardView.highlightSquares(moves);
   }
 
-  _handleMark(figure) {
-    this._markedFigure = figure;
-    this._displayMoves(figure);
+  _getMoves(figure) {
+    const moves = figure.findLegalMoves(this._boardModel);
+    console.log(moves);
+    return moves;
   }
 
   init() {
