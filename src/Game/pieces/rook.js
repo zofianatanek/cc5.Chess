@@ -9,12 +9,12 @@ class Rook extends Piece {
   }
 
   // Filtrowanie ruchów wykraczających poza szachownice
-  filterOutBoardMoves(possibleMoves) {
-    
-  }
+  filterOutBoardMoves(possibleMoves) {}
 
   // Główna metoda, w której trzeba zapisać wszystkie możliwe ruchy danej bierki
   findLegalMoves(board) {
     //console.log(board);
   }
-};
+}
+
+export default Rook;
