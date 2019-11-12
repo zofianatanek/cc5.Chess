@@ -9,7 +9,7 @@ class Pawn extends Piece {
   }
 
   // Filtrowanie ruchów wykraczających poza szachownice
-  filterOutBoardMoves(possibleMoves) {
+  _filterOutBoardMoves(possibleMoves) {
     return possibleMoves.filter(el => {
       return !(el[0] > 7 || el[0] < 0);
     });
@@ -25,7 +25,7 @@ class Pawn extends Piece {
       allMoves.push([this._x + this._vector * 2, this._y]);
     }
 
-    legalMoves = this.filterOutBoardMoves(allMoves);
+    legalMoves = this._filterOutBoardMoves(allMoves);
 
     return legalMoves;
   }
