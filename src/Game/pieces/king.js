@@ -27,7 +27,7 @@ class King extends Piece {
 
   // Główna metoda, w której trzeba zapisać wszystkie możliwe ruchy danej bierki
   findLegalMoves(board) {
-    console.log(board);
+    // console.log(board);
     // Król jest najważniejszą, choć nie najsilniejszą figurą na szachownicy. Może poruszać się w każdym kierunku, ale tylko o jedno pole (również po skosach)
 
     const x = this._x; // row
