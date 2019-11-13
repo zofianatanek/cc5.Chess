@@ -23,7 +23,25 @@ export default class GameCtrl {
 
     const boardElement = this._boardModel[x][y] || null;
 
+    console.log(boardElement);
+
     boardElement ? this._getMoves(boardElement) : null;
+
+    const gotBoardElement = Boolean(boardElement);
+    const gotMarkedFigure = Boolean(this._markedFigure);
+
+    this._handleMark(boardElement);
+  }
+
+  _handleMark(figure) {
+    this._markedFigure = figure;
+    this._displayMoves(figure);
+  }
+
+  _displayMoves(figure) {
+    let moves = this._getMoves(figure);
+
+    this._boardView.highlightSquares(moves);
   }
 
   _getMoves(figure) {

@@ -9,46 +9,26 @@ class Pawn extends Piece {
   }
 
   // Filtrowanie ruchów wykraczających poza szachownice
-  filterOutBoardMoves(possibleMoves) {
-    // DIY
+  _filterOutBoardMoves(possibleMoves) {
+    return possibleMoves.filter(el => {
+      return !(el[0] > 7 || el[0] < 0);
+    });
   }
 
-  // Główna metoda, w której trzeba zapisać wszystkie możliwe ruchy danej bierki
+  // główna metoda, w której trzeba zapisać wszystkie możliwe ruchy danej bierki.
   findLegalMoves(board) {
-    console.log(board);
+    let legalMoves;
+    const allMoves = Array([this._x + this._vector, this._y]);
 
-    // Kot jako przykładowa bierka może poruszać się o jedno pole na skos w każdą stronę, oraz dowolną ilość pól na wprost do napotkania na przeszkodę (koniec szachownicy / bierka tego samego koloru - wtedy zatrzymuje się przed nią, bierka innego koloru - może bić, czyli może stanąć na tym samym miejscu co dana bierka)
+    // Dla pierwszego ruchu możliwość ruchu o 2
+    if (this._pristine) {
+      allMoves.push([this._x + this._vector * 2, this._y]);
+    }
 
-    const x = this._x; // row
-    const y = this._y; // column
-    const v = this._vector // up/down
+    legalMoves = this._filterOutBoardMoves(allMoves);
 
-    const diagonalMoves = [
-      [x - v, y - 1],
-      [x - v, y + 1],
-      [x + v, y + 1],
-      [x + v, y - 1]
-    ]
-
-    let frontMoves = [];
-    if (v < 0) {
-      for (let i = x - 1; i >= 0; i--) {
-        frontMoves.push([i, y]);
-      }
-    } else {
-      for (let i = x + 1; i <= 7; i++) {
-        frontMoves.push([i, y]);
-      }
-    };
-
-    const allMoves = diagonalMoves.concat(frontMoves)
-    return allMoves;
-
-    // let legalMoves;
-    // legalMoves = this.filterOutBoardMoves(allMoves);
-    // return legalMoves;
+    return legalMoves;
   }
-
 }
 
 export default Pawn;
