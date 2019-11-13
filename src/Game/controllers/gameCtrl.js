@@ -25,6 +25,8 @@ export default class GameCtrl {
 
     const boardElement = this._boardModel[x][y] || null;
 
+    console.log(boardElement);
+
     boardElement ? this._getMoves(boardElement) : null;
 
     const gotBoardElement = Boolean(boardElement);
@@ -33,10 +35,6 @@ export default class GameCtrl {
     this._handleMark(boardElement);
   }
 
-  _getMoves(figure) {
-    const moves = figure.findLegalMoves(this._boardModel);
-    return moves;
-  }
   //funkcja do filtorwania ruchów króla tak żeby nie mógł wejść na pola, na których będzie mógł być zbity przez przeciwnika
   _filteredMoves(figure) {
     let moves = figure.findLegalMoves(this._boardModel);
@@ -72,6 +70,10 @@ export default class GameCtrl {
     // koniec i zwracanie albo przefiltorwanej tablicy, albo normalnej
     return moves;
   }
+  _handleMark(figure) {
+    this._markedFigure = figure;
+    this._displayMoves(figure);
+  }
 
   _displayMoves(figure) {
     // let moves = this._getMoves(figure);
@@ -80,9 +82,10 @@ export default class GameCtrl {
     this._boardView.highlightSquares(moves);
   }
 
-  _handleMark(figure) {
-    this._markedFigure = figure;
-    this._displayMoves(figure);
+  _getMoves(figure) {
+    const moves = figure.findLegalMoves(this._boardModel);
+    console.log(moves);
+    return moves;
   }
 
   init() {
