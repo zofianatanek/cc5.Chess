@@ -11,8 +11,6 @@ class Rook extends Piece {
   // Filtrowanie ruchów wykraczających poza szachownice
   filterOutBoardMoves(possibleMoves) {
 
-  }
-
   findAllMoves(x, y) {
     let up = [];
     let down = [];
