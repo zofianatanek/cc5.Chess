@@ -13,13 +13,20 @@ export default class GameCtrl {
         .map(el => {
           return +el;
         });
-      this._controllClick(squarePosition);
+
+        if(ev.target.closest(".square").classList.contains('highlighted')){
+          this._boardView.removeAllHighlights();
+          this.doMove(squarePosition);
+        } else {
+          this._controllClick(squarePosition);
+        }
     });
   }
 
   _controllClick(position) {
     const x = position[0];
     const y = position[1];
+
 
     const boardElement = this._boardModel[x][y] || null;
 
@@ -29,12 +36,15 @@ export default class GameCtrl {
     const gotMarkedFigure = Boolean(this._markedFigure);
 
     this._handleMark(boardElement);
+
   }
 
   _getMoves(figure) {
-    const moves = figure.findLegalMoves(this._boardModel);
-    console.log(moves);
-    return moves;
+    if(figure){
+      const moves = figure.findLegalMoves(this._boardModel);
+      console.log(moves);
+      return moves;
+    }
   }
 
   _displayMoves(figure) {
@@ -45,7 +55,24 @@ export default class GameCtrl {
 
   _handleMark(figure) {
     this._markedFigure = figure;
+
+    this._boardView.removeAllHighlights();
     this._displayMoves(figure);
+  }
+
+  doMove(squarePos){
+    const x = squarePos[0];  //pozycja x klikniecia
+    const y = squarePos[1];  //pozycja y klikniecia
+    const figX = this._markedFigure._x;  //pozycja x figury
+    const figY = this._markedFigure._y;  //pozycja y figury
+
+    this._markedFigure._x = x;
+    this._markedFigure._y = y;
+    this._markedFigure._pristine = false;
+    
+    this._boardModel[figX][figY]="";//`${figX}, ${figY}`;
+    this._boardModel[x][y]=this._markedFigure;
+    this._boardView._displayPieces(this._boardModel);
   }
 
   init() {

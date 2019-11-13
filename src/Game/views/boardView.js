@@ -38,6 +38,13 @@ export default class BoardView {
     });
   }
 
+  removeAllHighlights() {
+    let allSquares = board.querySelectorAll('.board *');
+    allSquares.forEach(square => {
+      square.classList.remove("highlighted");
+    })    
+  }
+
   init(board) {
     this._createSquares(board);
     this._displayPieces(board);
