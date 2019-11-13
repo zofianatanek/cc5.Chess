@@ -9,35 +9,34 @@ class Rook extends Piece {
   }
 
   // Filtrowanie ruchów wykraczających poza szachownice
-  filterOutBoardMoves(possibleMoves) {
 
   findAllMoves(x, y) {
     let up = [];
     let down = [];
     let left = [];
     let right = [];
-    let allMoves = []
+    let allMoves = [];
     for (let i = 1; i < 8; i++) {
-        up.push([x - i, y]);
-        down.push([x + i, y]);
-        left.push([x, y - i]);
-        right.push([x, y + i]);
+      up.push([x - i, y]);
+      down.push([x + i, y]);
+      left.push([x, y - i]);
+      right.push([x, y + i]);
     }
-    return allMoves = up.concat(down, left, right);
-}
+    return (allMoves = up.concat(down, left, right));
+  }
 
   // Główna metoda, w której trzeba zapisać wszystkie możliwe ruchy danej bierki
   findLegalMoves(board) {
-    console.log(board)
+    console.log(board);
     const x = this._x;
     const y = this._y;
     let legalMoves = this.findAllMoves(x, y).filter(el => {
-      el[0] >= 0 && el[0] < 8 && el[1] >= 0 && el[1] < 8 
-      ? (el = true) 
-      : (el = false);
-    return el;
+      el[0] >= 0 && el[0] < 8 && el[1] >= 0 && el[1] < 8
+        ? (el = true)
+        : (el = false);
+      return el;
     });
-    return legalMoves; 
+    return legalMoves;
   }
 }
 
