@@ -40,6 +40,17 @@ findAllMoves(x, y) {
   return allMoves
 }
 
+// Metoda sprawdzająca czy na polach, po których porusza się goniec stoją inne figury
+checkTakenFields(arr, board) {
+  let fields = [];
+  for (let i = 0; i < arr.length; i++){
+    let y = arr[i][0];
+    let x = arr[i][1];
+    if (board[y][x] === undefined ? fields.push('empty') : fields.push('taken'));
+  }
+  return fields
+}
+
 findLegalMoves(board) {
 
   let legalMoves = this.findAllMoves(x, y)
