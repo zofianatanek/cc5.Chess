@@ -20,7 +20,7 @@ class Bishop extends Piece {
   }
 
   // Metoda znajdująca wszystkie ruchy i zwracająca przefiltrowaną tablicę zawierającą 4 tablice z ruchami w możliwych kierunkach
-  findAllMoves(x, y) {
+  findAllMoves() {
 
     const x = this._x;
     const y = this._y;
@@ -36,7 +36,7 @@ class Bishop extends Piece {
       upRight.push([x - i, y + i]);
       downRight.push([x + i, y + i]);
     }
-    allMoves.push(this.filterMoves(upLeft), this.filterMoves(downLleft), this.filterMoves(upRight), this.filterMoves(downRight));
+    allMoves.push(this.filterMoves(upLeft), this.filterMoves(downLeft), this.filterMoves(upRight), this.filterMoves(downRight));
     return allMoves
   }
 
@@ -73,8 +73,17 @@ class Bishop extends Piece {
   }
 
   findLegalMoves(board) {
+    let allMoves = this.findAllMoves()
+    let delimitedMoves = []
 
-    let legalMoves = this.findAllMoves(x, y)
+    for (let i = 0; i < allMoves.length; i ++){
+      var route = this.checkTakenFields(allMoves[i], board);
+      var collisionIndex = this.findCollisions(route);
+      var possibleMoves = this.delimitPathMoves(allMoves[i], collisionIndex);
+      delimitedMoves.push(possibleMoves);
+    }
+
+    let legalMoves = delimitedMoves.flat();
     return legalMoves;
   }
 }
