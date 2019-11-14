@@ -16,10 +16,15 @@ class Bishop extends Piece {
         :(elem = false);
     return elem;
   });
+  return filteredMoves
 }
 
-// Metoda znajdująca wszystkie ruchy bez filtra
+// Metoda znajdująca wszystkie ruchy i zwracająca przefiltrowaną tablicę zawierającą 4 tablice z ruchami w możliwych kierunkach
 findAllMoves(x, y) {
+
+  const x = this._x;
+  const y = this._y;
+
   let upLeft = [];
   let upRight = [];
   let downLeft = [];
@@ -27,18 +32,16 @@ findAllMoves(x, y) {
   let allMoves = [];
   for (let i = 1; i < 8; i++) {
     upLeft.push([x - i, y - i]);
-    upRight.push([x + i, y - i]);
-    downLeft.push([x - i, y + i]);
+    downLeft.push([x + i, y - i]);
+    upRight.push([x - i, y + i]);
     downRight.push([x + i, y + i]);
   }
-  return (allMoves = upLeft.concat(upRight, downLeft, downRight));
+  allMoves.push(this.filterMoves(upLeft), this.filterMoves(downLleft), this.filterMoves(upRight), this.filterMoves(downRight));
+  return allMoves
 }
 
 findLegalMoves(board) {
-  console.log(board);
 
-  const x = this._x;
-  const y = this._y;
   let legalMoves = this.findAllMoves(x, y)
   return legalMoves;
 }
