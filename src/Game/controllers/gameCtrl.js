@@ -5,7 +5,6 @@ export default class GameCtrl {
     this._boardView = new BoardView(this._boardContainer);
   }
 
-
   _setListeners() {
     this._boardContainer.addEventListener("click", ev => {
       const squarePosition = ev.target
@@ -14,17 +13,21 @@ export default class GameCtrl {
         .map(el => {
           return +el;
         });
-      this._controllClick(squarePosition);
 
+        if(ev.target.closest(".square").classList.contains('highlighted')){
+          this._boardView.removeAllHighlights();
+          this.doMove(squarePosition);
+        } else {
+          this._controllClick(squarePosition);
+        }
     });
   }
 
   _controllClick(position) {
     const x = position[0];
     const y = position[1];
-
+    
     const boardElement = this._boardModel[x][y] || null;
-
     console.log(boardElement);
 
     boardElement ? this._getMoves(boardElement) : null;
@@ -70,8 +73,10 @@ export default class GameCtrl {
     // koniec i zwracanie albo przefiltorwanej tablicy, albo normalnej
     return moves;
   }
+
   _handleMark(figure) {
     this._markedFigure = figure;
+    this._boardView.removeAllHighlights();    
     this._displayMoves(figure);
   }
 
@@ -83,9 +88,26 @@ export default class GameCtrl {
   }
 
   _getMoves(figure) {
-    const moves = figure.findLegalMoves(this._boardModel);
-    console.log(moves);
-    return moves;
+    if(figure){
+      const moves = figure.findLegalMoves(this._boardModel);
+      console.log(moves);
+      return moves;
+    }
+  }
+
+  doMove(squarePos){
+    const x = squarePos[0];  //pozycja x klikniecia
+    const y = squarePos[1];  //pozycja y klikniecia
+    const figX = this._markedFigure._x;  //pozycja x figury
+    const figY = this._markedFigure._y;  //pozycja y figury
+
+    this._markedFigure._x = x;
+    this._markedFigure._y = y;
+    this._markedFigure._pristine = false;
+    
+    this._boardModel[figX][figY]=null;//`${figX}, ${figY}`;
+    this._boardModel[x][y]=this._markedFigure;
+    this._boardView._displayPieces(this._boardModel);
   }
 
   init() {
