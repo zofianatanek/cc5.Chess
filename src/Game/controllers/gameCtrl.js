@@ -105,7 +105,7 @@ export default class GameCtrl {
     this._markedFigure._y = y;
     this._markedFigure._pristine = false;
     
-    this._boardModel[figX][figY]="";//`${figX}, ${figY}`;
+    this._boardModel[figX][figY]=null;//`${figX}, ${figY}`;
     this._boardModel[x][y]=this._markedFigure;
     this._boardView._displayPieces(this._boardModel);
   }
