@@ -8,26 +8,34 @@ class Pawn extends Piece {
     this._vector = this._side == "white" ? -1 : 1; // 1 to góra -1 to dół
   }
 
-  // Filtrowanie ruchów wykraczających poza szachownice
-  _filterOutBoardMoves(possibleMoves) {
-    return possibleMoves.filter(el => {
-      return !(el[0] > 7 || el[0] < 0);
-    });
-  }
-
-  // główna metoda, w której trzeba zapisać wszystkie możliwe ruchy danej bierki.
   findLegalMoves(board) {
-    let legalMoves;
-    const allMoves = Array([this._x + this._vector, this._y]);
+    const moves = Array();
 
-    // Dla pierwszego ruchu możliwość ruchu o 2
-    if (this._pristine) {
-      allMoves.push([this._x + this._vector * 2, this._y]);
+    if (!board[this._x + this._vector][this._y]) {
+      moves.push([this._x + this._vector, this._y]);
+
+      if (this._pristine && !board[this._x + this._vector * 2][this._y]) {
+        moves.push([this._x + this._vector * 2, this._y]);
+      }
     }
 
-    legalMoves = this._filterOutBoardMoves(allMoves);
+    return moves;
+  }
 
-    return legalMoves;
+  findLegalAttacks(board) {
+    const attacks = Array(
+      [this._x + this._vector, this._y + 1],
+      [this._x + this._vector, this._y - 1]
+    );
+
+    attacks = this.filterOutBoardMoves(attacks);
+    return attacks;
+  }
+
+  filterOutBoardMoves(possibleMoves) {
+    return possibleMoves.filter(el => {
+      return 0 <= el[0] && el[0] <= 7 && 0 <= el[1] && el[1] <= 7;
+    });
   }
 }
 
