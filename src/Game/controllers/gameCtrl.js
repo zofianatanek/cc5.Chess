@@ -83,7 +83,7 @@ export default class GameCtrl {
   _displayMoves(figure) {
     // let moves = this._getMoves(figure);
     //podpiałem nowa dablice do wyświetlania ruchów oraz zmieniłem pozycje jednego z króli dla sprawdzenia pozycji
-    let moves = this._filteredMoves(figure);
+    let moves = this.filterAllyBeating(this._filteredMoves(figure), figure._side);
     this._boardView.highlightSquares(moves);
   }
 
@@ -93,6 +93,17 @@ export default class GameCtrl {
       console.log(moves);
       return moves;
     }
+  }
+
+  filterAllyBeating(possibleMoves, side) {
+    return possibleMoves.filter(element => {
+      let moveX =  element[0];
+      let moveY = element[1];
+      if (this._boardModel[moveX][moveY]){     //jesli jest figura
+        return (this._boardModel[moveX][moveY]._side!==side); // innego koloru? true; tego samego? false 
+      }
+      return true;      
+    });
   }
 
   doMove(squarePos){
@@ -105,7 +116,7 @@ export default class GameCtrl {
     this._markedFigure._y = y;
     this._markedFigure._pristine = false;
     
-    this._boardModel[figX][figY]=null;//`${figX}, ${figY}`;
+    this._boardModel[figX][figY]=null;
     this._boardModel[x][y]=this._markedFigure;
     this._boardView._displayPieces(this._boardModel);
   }
