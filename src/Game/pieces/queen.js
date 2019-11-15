@@ -33,14 +33,6 @@ class Queen extends Piece {
 
 //zmodyfikowana metoda wyświetlająca wszystkie ruchy Hetmana bez kolizji z inną figurą
     allMoves(x, y) {
-      let moveUp = [];
-      let moveDown = [];
-      let moveRight = [];
-      let moveLeft = [];
-      let moveUpLeft = [];
-      let moveUpRight = [];
-      let moveDownLeft = [];
-      let moveDownRight = [];
       let allMoves = [];
       let moveUp = () => {
        for(let i = 1; i <= 7; i++){
