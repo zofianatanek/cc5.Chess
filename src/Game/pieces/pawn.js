@@ -28,10 +28,16 @@ class Pawn extends Piece {
    findLegalAttacks(board) {
       const attacks = [];
 
-      if (board[this._x + this._vector][this._y + 1]._side != this._side) {
+      if (
+         board[this._x + this._vector][this._y + 1] &&
+         board[this._x + this._vector][this._y + 1]._side != this._side
+      ) {
          attacks.push([this._x + this._vector, this._y + 1]);
       }
-      if (board[this._x + this._vector][this._y - 1]._side != this._side) {
+      if (
+         board[this._x + this._vector][this._y - 1] &&
+         board[this._x + this._vector][this._y - 1]._side != this._side
+      ) {
          attacks.push([this._x + this._vector, this._y - 1]);
       }
 
