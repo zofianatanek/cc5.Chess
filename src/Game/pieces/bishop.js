@@ -46,7 +46,7 @@ class Bishop extends Piece {
     for (let i = 0; i < arr.length; i++) {
       let y = arr[i][0];
       let x = arr[i][1];
-      if (board[y][x] === undefined ? fields.push('empty') : fields.push('taken'));
+      if (board[y][x] === (undefined || null) ? fields.push('empty') : fields.push('taken'));
     }
     return fields
   }
