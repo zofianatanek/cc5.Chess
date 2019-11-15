@@ -1,8 +1,10 @@
 import Pawn from "../pieces/pawn";
 import King from "../pieces/king";
 import Bishop from "../pieces/bishop";
+import Queen from "../pieces/queen";
 import Knight from "../pieces/knight";
 import Rook from "../pieces/rook";
+
 
 export default class Board extends Array {
   createSecondLevel() {
@@ -13,7 +15,7 @@ export default class Board extends Array {
 
   // tutaj tworzycie nowe obiekty waszych bierek i od razu umieszczacie je na szachownicy
   createAndSetKings(side) {
-    const row = side === "white" ? 7 : 0;
+    const row = side === "white" ? 3 : 0;
     this[row][4] = new King(row, 4, side);
   }
 
@@ -21,6 +23,11 @@ export default class Board extends Array {
     const row = side === "white" ? 7 : 0;
     this[row][2] = new Bishop(row, 2, side);
     this[row][5] = new Bishop(row, 5, side);
+  }
+
+  createAndSetQueens(side) {
+    const row = side === "white" ? 7 : 0;
+    this[row][3] = new Queen(row, 3, side);
   }
 
   createAndSetKnights(side) {
@@ -53,6 +60,7 @@ export default class Board extends Array {
       this.createAndSetPawns(colors[i]);
       this.createAndSetKings(colors[i]);
       this.createAndSetBishops(colors[i]);
+      this.createAndSetQueens(colors[i]);
       this.createAndSetKnights(colors[i]);
       this.createAndSetRooks(colors[i]);
     }
