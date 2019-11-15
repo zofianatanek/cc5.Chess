@@ -13,16 +13,21 @@ export default class GameCtrl {
         .map(el => {
           return +el;
         });
-      this._controllClick(squarePosition);
+
+        if(ev.target.closest(".square").classList.contains('highlighted')){
+          this._boardView.removeAllHighlights();
+          this.doMove(squarePosition);
+        } else {
+          this._controllClick(squarePosition);
+        }
     });
   }
 
   _controllClick(position) {
     const x = position[0];
     const y = position[1];
-
+    
     const boardElement = this._boardModel[x][y] || null;
-
     console.log(boardElement);
 
     boardElement ? this._getMoves(boardElement) : null;
@@ -33,21 +38,76 @@ export default class GameCtrl {
     this._handleMark(boardElement);
   }
 
+  //funkcja do filtorwania ruchów króla tak żeby nie mógł wejść na pola, na których będzie mógł być zbity przez przeciwnika
+  _filteredMoves(figure) {
+    let moves = figure.findLegalMoves(this._boardModel);
+    //dzialania typowo dla króla
+    if (figure.name === 'King') {
+      const moveBoard = {
+        white_in_danger: [],
+        black_in_danger: [],
+        pionki: [],
+      }
+      for (let i = 0; i < this._boardModel.length; i++) {
+        for (let j = 0; j < this._boardModel[i].length; j++) {
+          if (this._boardModel[i][j] !== undefined && this._getMoves(this._boardModel[i][j]) !== undefined) {
+            moveBoard.pionki.push(this._boardModel[i][j].name)
+            let moves_tab = this._getMoves(this._boardModel[i][j]);
+            let tabToPush = moveBoard.black_in_danger;
+            if (this._boardModel[i][j]._side === 'black') {
+              tabToPush = moveBoard.white_in_danger;
+            }
+            moves_tab.forEach(mov => {
+              if (!Array.isArray(tabToPush[mov[0]])) { tabToPush[mov[0]] = [] }
+              tabToPush[mov[0]][mov[1]] = 'danger'
+            });
+          }
+        }
+      }
+      // filtrowanie ruchów Króla
+      let side;
+      figure._side === 'white' ? side = moveBoard.white_in_danger : side = moveBoard.black_in_danger;
+      let res;
+      moves = moves.filter((mov) => { side[mov[0]] && side[mov[0]][mov[1]] ? res = side[mov[0]][mov[1]] !== 'danger' : res = true; return res });
+    }
+    // koniec i zwracanie albo przefiltorwanej tablicy, albo normalnej
+    return moves;
+  }
+
   _handleMark(figure) {
     this._markedFigure = figure;
+    this._boardView.removeAllHighlights();    
     this._displayMoves(figure);
   }
 
   _displayMoves(figure) {
-    let moves = this._getMoves(figure);
-
+    // let moves = this._getMoves(figure);
+    //podpiałem nowa dablice do wyświetlania ruchów oraz zmieniłem pozycje jednego z króli dla sprawdzenia pozycji
+    let moves = this._filteredMoves(figure);
     this._boardView.highlightSquares(moves);
   }
 
   _getMoves(figure) {
-    const moves = figure.findLegalMoves(this._boardModel);
-    console.log(moves);
-    return moves;
+    if(figure){
+      const moves = figure.findLegalMoves(this._boardModel);
+      console.log(moves);
+      return moves;
+    }
+  }
+
+  doMove(squarePos){
+    const x = squarePos[0];  //pozycja x klikniecia
+    const y = squarePos[1];  //pozycja y klikniecia
+    const figX = this._markedFigure._x;  //pozycja x figury
+    const figY = this._markedFigure._y;  //pozycja y figury
+
+    this._markedFigure._x = x;
+    this._markedFigure._y = y;
+    this._markedFigure._pristine = false;
+    
+    this._boardModel[figX][figY]=null;//`${figX}, ${figY}`;
+    this._boardModel[x][y]=this._markedFigure;
+    this._boardView._displayPieces(this._boardModel);
   }
 
   init() {
