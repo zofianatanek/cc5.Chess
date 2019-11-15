@@ -22,9 +22,8 @@ export default class BoardView {
     // Iterujemy po wszystkich elementach (empty jest pomijany w iteracji) tablicy board
     board.forEach((row, rowIndex) => {
       row.forEach((piece, squareIndex) => {
-        this._boardElement.querySelector(
-          `[data-id="${rowIndex}-${squareIndex}"]`
-        ).innerHTML = piece.display ? piece.display : "ERROR";
+        let el = this._boardElement.querySelector(`[data-id="${rowIndex}-${squareIndex}"]`);
+        el.innerHTML = (piece === null) ? `${el.dataset.x}, ${el.dataset.y}` : piece.display ? piece.display : "ERROR";
       });
     });
   }
@@ -36,6 +35,13 @@ export default class BoardView {
         .querySelector(`[data-id="${position[0]}-${position[1]}"]`)
         .classList.add("highlighted");
     });
+  }
+
+  removeAllHighlights() {
+    let allSquares = board.querySelectorAll('.board *');
+    allSquares.forEach(square => {
+      square.classList.remove("highlighted");
+    })    
   }
 
   init(board) {
