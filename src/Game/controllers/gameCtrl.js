@@ -14,19 +14,27 @@ export default class GameCtrl {
           return +el;
         });
 
-        if(ev.target.closest(".square").classList.contains('highlighted')){
-          this._boardView.removeAllHighlights();
+      if (ev.target.closest(".square").classList.contains('highlighted')) {
+        //castling
+        if (ev.target.closest(".square").dataset.castlingX && ev.target.closest(".square").dataset.castlingY) {
+          this.doCastling([parseInt(ev.target.closest(".square").dataset.castlingX), parseInt(ev.target.closest(".square").dataset.castlingY)], [squarePosition]);
           this.doMove(squarePosition);
         } else {
-          this._controllClick(squarePosition);
+          //nocastling
+          this.doMove(squarePosition);
         }
+        this._boardView.removeAllHighlights();
+
+      } else {
+        this._controllClick(squarePosition);
+      }
     });
   }
 
   _controllClick(position) {
     const x = position[0];
     const y = position[1];
-    
+
     const boardElement = this._boardModel[x][y] || null;
     console.log(boardElement);
 
@@ -46,19 +54,36 @@ export default class GameCtrl {
       const moveBoard = {
         white_in_danger: [],
         black_in_danger: [],
-        pionki: [],
       }
       for (let i = 0; i < this._boardModel.length; i++) {
         for (let j = 0; j < this._boardModel[i].length; j++) {
           if (this._boardModel[i][j] !== undefined && this._getMoves(this._boardModel[i][j]) !== undefined) {
-            moveBoard.pionki.push(this._boardModel[i][j].name)
-            let moves_tab = this._getMoves(this._boardModel[i][j]);
+            if (this._boardModel[i][j].name !== 'pawn') {
+              moveBoard.pionki.push(this._boardModel[i][j].name)
+              var moves_tab = this._getMoves(this._boardModel[i][j]);
+            } else {
+              var moves_tab = [];
+              // var moves_tab = this._boardModel[i][j].findLegalAttacks.call(this._boardModel[i][j], this._boardModel);
+              // sprawdzenie czy króla może zbic pionek !
+              var that = this._boardModel[i][j];
+              // var moves_tab;
+              moves_tab.push([
+                [that._x + that._vector],
+                [that._y + 1]
+              ], [
+                [that._x + that._vector],
+                [that._y - 1]
+              ]);
+            }
+
             let tabToPush = moveBoard.black_in_danger;
             if (this._boardModel[i][j]._side === 'black') {
               tabToPush = moveBoard.white_in_danger;
             }
             moves_tab.forEach(mov => {
-              if (!Array.isArray(tabToPush[mov[0]])) { tabToPush[mov[0]] = [] }
+              if (!Array.isArray(tabToPush[mov[0]])) {
+                tabToPush[mov[0]] = []
+              }
               tabToPush[mov[0]][mov[1]] = 'danger'
             });
           }
@@ -68,7 +93,10 @@ export default class GameCtrl {
       let side;
       figure._side === 'white' ? side = moveBoard.white_in_danger : side = moveBoard.black_in_danger;
       let res;
-      moves = moves.filter((mov) => { side[mov[0]] && side[mov[0]][mov[1]] ? res = side[mov[0]][mov[1]] !== 'danger' : res = true; return res });
+      moves = moves.filter((mov) => {
+        side[mov[0]] && side[mov[0]][mov[1]] ? res = side[mov[0]][mov[1]] !== 'danger' : res = true;
+        return res
+      });
     }
     // koniec i zwracanie albo przefiltorwanej tablicy, albo normalnej
     return moves;
@@ -76,7 +104,7 @@ export default class GameCtrl {
 
   _handleMark(figure) {
     this._markedFigure = figure;
-    this._boardView.removeAllHighlights();    
+    this._boardView.removeAllHighlights();
     this._displayMoves(figure);
   }
 
@@ -88,26 +116,35 @@ export default class GameCtrl {
   }
 
   _getMoves(figure) {
-    if(figure){
+    if (figure) {
       const moves = figure.findLegalMoves(this._boardModel);
-      console.log(moves);
+      // console.log(moves);
       return moves;
     }
   }
 
-  doMove(squarePos){
-    const x = squarePos[0];  //pozycja x klikniecia
-    const y = squarePos[1];  //pozycja y klikniecia
-    const figX = this._markedFigure._x;  //pozycja x figury
-    const figY = this._markedFigure._y;  //pozycja y figury
+  doMove(squarePos) {
+    const x = squarePos[0]; //pozycja x klikniecia
+    const y = squarePos[1]; //pozycja y klikniecia
+    const figX = this._markedFigure._x; //pozycja x figury
+    const figY = this._markedFigure._y; //pozycja y figury
 
     this._markedFigure._x = x;
     this._markedFigure._y = y;
     this._markedFigure._pristine = false;
-    
-    this._boardModel[figX][figY]=null;//`${figX}, ${figY}`;
-    this._boardModel[x][y]=this._markedFigure;
+
+    this._boardModel[figX][figY] = null; //`${figX}, ${figY}`;
+    this._boardModel[x][y] = this._markedFigure;
     this._boardView._displayPieces(this._boardModel);
+  }
+  doCastling(cords, a) {
+    let sign;
+    cords[1] > 4 ? sign = -1 : sign = 1;
+
+    let fig = this._boardModel[cords[0]][cords[1]];
+    this._boardModel[fig._x][a[0][1] + sign] = fig;
+    this._boardModel[fig._x][a[0][1] + sign]._y = a[0][1] + sign;
+    this._boardModel[cords[0]][cords[1]] = null;
   }
 
   init() {

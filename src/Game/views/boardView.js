@@ -31,9 +31,16 @@ export default class BoardView {
   highlightSquares(squares) {
     if (!squares) return;
     squares.forEach(position => {
-      this._boardElement
-        .querySelector(`[data-id="${position[0]}-${position[1]}"]`)
-        .classList.add("highlighted");
+      var el = this._boardElement
+        .querySelector(`[data-id="${position[0]}-${position[1]}"]`);
+      el.classList.add("highlighted");
+      //King-castling
+      if (position[2]) {
+        el.dataset.castlingX = position[3];
+        el.dataset.castlingY = position[4];
+      }
+
+
     });
   }
 
@@ -41,7 +48,10 @@ export default class BoardView {
     let allSquares = board.querySelectorAll('.board *');
     allSquares.forEach(square => {
       square.classList.remove("highlighted");
-    })    
+      //King-castling
+      square.removeAttribute('data-castling-x');
+      square.removeAttribute('data-castling-y');
+    })
   }
 
   init(board) {
