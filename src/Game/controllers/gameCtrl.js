@@ -111,7 +111,7 @@ export default class GameCtrl {
   _displayMoves(figure) {
     // let moves = this._getMoves(figure);
     //podpiałem nowa dablice do wyświetlania ruchów oraz zmieniłem pozycje jednego z króli dla sprawdzenia pozycji
-    let moves = this._filteredMoves(figure);
+    let moves = this.filterAllyBeating(this._filteredMoves(figure), figure._side);
     this._boardView.highlightSquares(moves);
   }
 
@@ -123,11 +123,22 @@ export default class GameCtrl {
     }
   }
 
-  doMove(squarePos) {
-    const x = squarePos[0]; //pozycja x klikniecia
-    const y = squarePos[1]; //pozycja y klikniecia
-    const figX = this._markedFigure._x; //pozycja x figury
-    const figY = this._markedFigure._y; //pozycja y figury
+  filterAllyBeating(possibleMoves, side) {
+    return possibleMoves.filter(element => {
+      let moveX =  element[0];
+      let moveY = element[1];
+      if (this._boardModel[moveX][moveY]){     //jesli jest figura
+        return (this._boardModel[moveX][moveY]._side!==side); // innego koloru? true; tego samego? false 
+      }
+      return true;      
+    });
+  }
+
+  doMove(squarePos){
+    const x = squarePos[0];  //pozycja x klikniecia
+    const y = squarePos[1];  //pozycja y klikniecia
+    const figX = this._markedFigure._x;  //pozycja x figury
+    const figY = this._markedFigure._y;  //pozycja y figury
 
     this._markedFigure._x = x;
     this._markedFigure._y = y;
@@ -135,6 +146,8 @@ export default class GameCtrl {
 
     this._boardModel[figX][figY] = null; //`${figX}, ${figY}`;
     this._boardModel[x][y] = this._markedFigure;
+ 
+
     this._boardView._displayPieces(this._boardModel);
   }
   doCastling(cords, a) {
