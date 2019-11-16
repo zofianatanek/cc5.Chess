@@ -43,10 +43,12 @@ class Bishop extends Piece {
   // Metoda sprawdzająca czy na polach, po których porusza się goniec stoją inne figury
   checkTakenFields(arr, board) {
     let fields = [];
+    let x;
+    let y;
     for (let i = 0; i < arr.length; i++) {
-      let y = arr[i][0];
-      let x = arr[i][1];
-      if (board[y][x] === (undefined || null) ? fields.push('empty') : fields.push('taken'));
+      y = arr[i][0];
+      x = arr[i][1];
+      if (board[y][x] == (undefined || null) ? fields.push('empty') : fields.push('taken'));
     }
     return fields
   }
@@ -82,7 +84,6 @@ class Bishop extends Piece {
       var possibleMoves = this.delimitPathMoves(allMoves[i], collisionIndex);
       delimitedMoves.push(possibleMoves);
     }
-
     let legalMoves = delimitedMoves.flat();
     return legalMoves;
   }
