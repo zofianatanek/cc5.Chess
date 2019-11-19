@@ -11,7 +11,7 @@ class Knight extends Piece {
   // Filtrowanie ruchów wykraczających poza szachownice
   filterOutBoardMoves(possibleMoves) {
     return possibleMoves.filter(element => {
-      return (0<=element[0] && element[0]<=7 && 0<=element[1] && element[1]<=7);
+      return (0 <= element[0] && element[0] <= 7 && 0 <= element[1] && element[1] <= 7);
     });
   }
 
@@ -22,13 +22,13 @@ class Knight extends Piece {
     const v = this._vector // up/down
 
     const upMoves = [
-      [x + 2*v, y - 1],
-      [x + 2*v, y + 1]
+      [x + 2 * v, y - 1],
+      [x + 2 * v, y + 1]
     ]
 
     const downMoves = [
-      [x - 2*v, y - 1],
-      [x - 2*v, y + 1]
+      [x - 2 * v, y - 1],
+      [x - 2 * v, y + 1]
     ]
 
     const leftMoves = [
@@ -40,7 +40,7 @@ class Knight extends Piece {
       [x + v, y + 2],
       [x - v, y + 2]
     ]
-    
+
     const allMoves = upMoves.concat(downMoves).concat(leftMoves).concat(rightMoves)
     return this.filterOutBoardMoves(allMoves);
   }

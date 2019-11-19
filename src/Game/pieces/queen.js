@@ -115,7 +115,7 @@ let moveDownRight = () => {
     if (board[x + i, y + i] === 'false'){
       moveDownRight.push([x + i, y + i]);
     } else {
-      return moveDownRight;
+      return moveDownRight;filterOutBoardMoves
     }
   }
 }
@@ -125,9 +125,10 @@ let moveDownRight = () => {
   // Filtrowanie ruchów wykraczających poza szachownice
   filterOutBoardMoves(possibleMoves) {
   }
+
   // Główna metoda, w której trzeba zapisać wszystkie możliwe ruchy danej bierki
   findLegalMoves(board) {
-    console.log(board)
+    // console.log(board)
     const x = this._x;
     const y = this._y;
     let legalMoves = this.allMoves(x, y).filter(cell => {
