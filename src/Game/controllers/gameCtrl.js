@@ -3,7 +3,7 @@ export default class GameCtrl {
     this._boardContainer = document.querySelector(`#${boardContainerId}`);
     this._boardModel = new BoardModel();
     this._boardView = new BoardView(this._boardContainer);
-    this.Turn = 'white';
+    this.turn = 'white';
     this.movePossibility = true;
   }
 
@@ -38,7 +38,7 @@ export default class GameCtrl {
   _controllClick(position) {
     const x = position[0];
     const y = position[1];
-    const flag = this.Turn;
+    const flag = this.turn;
     
 
     const boardElement = this._boardModel[x][y] || null;
@@ -123,7 +123,7 @@ export default class GameCtrl {
     // let moves = this._getMoves(figure);
     //podpiałem nowa dablice do wyświetlania ruchów oraz zmieniłem pozycje jednego z króli dla sprawdzenia pozycji
     let moves = this.filterAllyBeating(this._filteredMoves(figure), figure._side);
-    this._boardView.highlightSquares(moves);
+    this.movePossibility == true ? this._boardView.highlightSquares(moves) : this._boardView.removeAllHighlights();
   }
 
   _getMoves(figure) {
@@ -158,11 +158,11 @@ export default class GameCtrl {
 
     this._boardModel[figX][figY] = null; //`${figX}, ${figY}`;
     this._boardModel[x][y] = this._markedFigure;
-    // console.log(this.Turn);
+ 
     
     this._boardView._displayPieces(this._boardModel);
-    this.Turn === 'white' ? this.Turn = 'black' : this.Turn = 'white'; //kolej białej czy czarnej
-    console.log("Teraz kolej: " + this.Turn) //wyswietlanie czyja kolej
+    this.turn === 'white' ? this.turn = 'black' : this.turn = 'white'; //kolej białych czy czarnych
+    
    
   }
   doCastling(cords, a) {
@@ -177,7 +177,6 @@ export default class GameCtrl {
 
   init() {
     console.log("Inicjalizacja controllera...");
-    console.log("Teraz kolej: " + this.Turn)
 
     this._boardModel.init();
     this._boardView.init(this._boardModel);
