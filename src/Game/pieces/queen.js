@@ -8,7 +8,7 @@ class Queen extends Piece {
     this._vector = this._side == "white" ? -1 : 1; // 1 to góra -1 to dół
   }
 
-    allMoves(x, y) {
+    findAllMoves(x, y) {
       let moveUp = [];
       let moveDown = [];
       let moveRight = [];
