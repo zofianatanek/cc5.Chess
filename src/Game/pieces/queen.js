@@ -140,8 +140,8 @@ let moveDownRight = () => {
   // Metoda sprawdzająca czy zachodzą kolizje z innymi figurami na torze ruchu gońca i zwracająca indeks pola, na którym dochodzi do kolizji
 
   findCollisions(arr) {
-    let collisionIndex = arr.findIndex(elem => {
-      return elem == 'taken';
+    let collisionIndex = arr.findIndex(cell => {
+      return cell == 'taken';
     })
     return collisionIndex
   }
