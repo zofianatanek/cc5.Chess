@@ -133,7 +133,7 @@ export default class GameCtrl {
     //szukamy królów na mapie
     this._boardModel.forEach(el => {
       el.forEach(fig => {
-        if (fig.name === "King") {
+        if (fig !== undefined && fig !== null && fig.name === "King") {
           king_tab.push(fig);
         }
       })
