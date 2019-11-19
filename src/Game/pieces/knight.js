@@ -17,8 +17,6 @@ class Knight extends Piece {
 
   // Główna metoda, w której trzeba zapisać wszystkie możliwe ruchy danej bierki
   findLegalMoves(board) {
-    // console.log(board);
-
     const x = this._x; // row
     const y = this._y; // column
     const v = this._vector // up/down

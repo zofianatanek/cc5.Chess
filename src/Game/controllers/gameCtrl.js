@@ -3,6 +3,8 @@ export default class GameCtrl {
     this._boardContainer = document.querySelector(`#${boardContainerId}`);
     this._boardModel = new BoardModel();
     this._boardView = new BoardView(this._boardContainer);
+    this.turn = 'white';
+    this.movePossibility = true;
   }
 
   _setListeners() {
@@ -21,7 +23,9 @@ export default class GameCtrl {
           this.doMove(squarePosition);
         } else {
           //nocastling
-          this.doMove(squarePosition);
+          if(this.movePossibility){
+            this.doMove(squarePosition);
+          }
         }
         this._boardView.removeAllHighlights();
 
@@ -34,16 +38,23 @@ export default class GameCtrl {
   _controllClick(position) {
     const x = position[0];
     const y = position[1];
+    const flag = this.turn;
+    
 
     const boardElement = this._boardModel[x][y] || null;
     console.log(boardElement);
+    const elementSide = boardElement._side
 
     boardElement ? this._getMoves(boardElement) : null;
 
     const gotBoardElement = Boolean(boardElement);
     const gotMarkedFigure = Boolean(this._markedFigure);
 
+    flag === elementSide ? this.movePossibility = true : this.movePossibility = false;
+
     this._handleMark(boardElement);
+    
+   
   }
 
   //funkcja do filtorwania ruchów króla tak żeby nie mógł wejść na pola, na których będzie mógł być zbity przez przeciwnika
@@ -178,6 +189,7 @@ export default class GameCtrl {
 
     //podpięcie mata, moim zdaniem to nie tutaj powinno być wpięte, a raczej tam gdzie są tury, ale nie wiem gdzie one są więc wpinam je tutaj !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     this._mat();
+
   }
 
   _getMoves(figure) {
@@ -188,11 +200,23 @@ export default class GameCtrl {
     }
   }
 
-  doMove(squarePos) {
-    const x = squarePos[0]; //pozycja x klikniecia
-    const y = squarePos[1]; //pozycja y klikniecia
-    const figX = this._markedFigure._x; //pozycja x figury
-    const figY = this._markedFigure._y; //pozycja y figury
+  filterAllyBeating(possibleMoves, side) {
+    return possibleMoves.filter(element => {
+      let moveX =  element[0];
+      let moveY = element[1];
+      if (this._boardModel[moveX][moveY]){     //jesli jest figura
+        return (this._boardModel[moveX][moveY]._side!==side); // innego koloru? true; tego samego? false 
+      }
+      return true;      
+    });
+  }
+
+  doMove(squarePos){
+    const x = squarePos[0];  //pozycja x klikniecia
+    const y = squarePos[1];  //pozycja y klikniecia
+    const figX = this._markedFigure._x;  //pozycja x figury
+    const figY = this._markedFigure._y;  //pozycja y figury
+ 
 
     this._markedFigure._x = x;
     this._markedFigure._y = y;
@@ -200,7 +224,12 @@ export default class GameCtrl {
 
     this._boardModel[figX][figY] = null; //`${figX}, ${figY}`;
     this._boardModel[x][y] = this._markedFigure;
+ 
+    
     this._boardView._displayPieces(this._boardModel);
+    this.turn === 'white' ? this.turn = 'black' : this.turn = 'white'; //kolej białych czy czarnych
+    
+   
   }
   doCastling(cords, a) {
     let sign;
@@ -218,6 +247,7 @@ export default class GameCtrl {
     this._boardModel.init();
     this._boardView.init(this._boardModel);
     this._setListeners();
+    
 
     console.log(this._boardModel); // służy do podejrzenia tablicy w konsoli
   }

@@ -7,7 +7,6 @@ class Piece {
     this._pristine = true;
     this._side = side; // 'black' or 'white'
   }
-
 }
 
 export default Piece;
