@@ -109,10 +109,10 @@ class Queen extends Piece {
     // return allMoves = moveUp.concat(moveDown, moveRight, moveLeft, moveUpLeft, moveUpRight, moveDownLeft, moveDownRight);
   }
   // Filtrowanie ruchów wykraczających poza szachownice
-  filterOutBoardMoves(possibleMoves) {}
+  filterOutBoardMoves(possibleMoves) { }
   // Główna metoda, w której trzeba zapisać wszystkie możliwe ruchy danej bierki
   findLegalMoves(board) {
-    console.log(board)
+    // console.log(board)
     const x = this._x;
     const y = this._y;
     // let legalMoves = this.allMoves(x, y).filter(cell => {
