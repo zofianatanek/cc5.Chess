@@ -3,6 +3,8 @@ export default class GameCtrl {
     this._boardContainer = document.querySelector(`#${boardContainerId}`);
     this._boardModel = new BoardModel();
     this._boardView = new BoardView(this._boardContainer);
+    this.Turn = 'white';
+    this.movePossibility = true;
   }
 
   _setListeners() {
@@ -21,7 +23,9 @@ export default class GameCtrl {
           this.doMove(squarePosition);
         } else {
           //nocastling
-          this.doMove(squarePosition);
+          if(this.movePossibility){
+            this.doMove(squarePosition);
+          }
         }
         this._boardView.removeAllHighlights();
 
@@ -34,16 +38,23 @@ export default class GameCtrl {
   _controllClick(position) {
     const x = position[0];
     const y = position[1];
+    const flag = this.Turn;
+    
 
     const boardElement = this._boardModel[x][y] || null;
     console.log(boardElement);
+    const elementSide = boardElement._side
 
     boardElement ? this._getMoves(boardElement) : null;
 
     const gotBoardElement = Boolean(boardElement);
     const gotMarkedFigure = Boolean(this._markedFigure);
 
+    flag === elementSide ? this.movePossibility = true : this.movePossibility = false;
+
     this._handleMark(boardElement);
+    
+   
   }
 
   //funkcja do filtorwania ruchów króla tak żeby nie mógł wejść na pola, na których będzie mógł być zbity przez przeciwnika
@@ -139,6 +150,7 @@ export default class GameCtrl {
     const y = squarePos[1];  //pozycja y klikniecia
     const figX = this._markedFigure._x;  //pozycja x figury
     const figY = this._markedFigure._y;  //pozycja y figury
+ 
 
     this._markedFigure._x = x;
     this._markedFigure._y = y;
@@ -146,9 +158,12 @@ export default class GameCtrl {
 
     this._boardModel[figX][figY] = null; //`${figX}, ${figY}`;
     this._boardModel[x][y] = this._markedFigure;
- 
-
+    // console.log(this.Turn);
+    
     this._boardView._displayPieces(this._boardModel);
+    this.Turn === 'white' ? this.Turn = 'black' : this.Turn = 'white'; //kolej białej czy czarnej
+    console.log("Teraz kolej: " + this.Turn) //wyswietlanie czyja kolej
+   
   }
   doCastling(cords, a) {
     let sign;
@@ -162,10 +177,12 @@ export default class GameCtrl {
 
   init() {
     console.log("Inicjalizacja controllera...");
+    console.log("Teraz kolej: " + this.Turn)
 
     this._boardModel.init();
     this._boardView.init(this._boardModel);
     this._setListeners();
+    
 
     console.log(this._boardModel); // służy do podejrzenia tablicy w konsoli
   }
