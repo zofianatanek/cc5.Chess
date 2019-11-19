@@ -33,6 +33,17 @@ class Queen extends Piece {
       allMoves.push(this.filterMoves(moveUp), this.filterMoves(moveDown), this.filterMoves(moveRight), this.filterMoves(moveLeft), this.filterMoves(moveUpLeft), this.filterMoves(moveDownLeft), this.filterMoves(moveUpRight), this.filterMoves(moveDownRight));
       return allMoves}
 
+  // Metoda filtrująca ruchy wychodzące poza szachownicę 
+  filterMoves(arr) {
+    let filteredMoves = arr.filter(cell => {
+      cell[0] >= 0 && cell[0] <= 7 && cell[1] >= 0 && cell[1] <= 7
+        ? (cell = true)
+        : (cell = false);
+      return cell;
+    });
+    return filteredMoves
+  }
+
 /*//zmodyfikowana metoda wyświetlająca wszystkie ruchy Hetmana bez kolizji z inną figurą
     allMoves(x, y, board) {
       let allMoves = [];
