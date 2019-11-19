@@ -28,8 +28,8 @@ class Queen extends Piece {
         moveDownLeft.push([x - i, y + i]);
         moveDownRight.push([x + i, y + i]);
       }
-      return allMoves = moveUp.concat(moveDown, moveRight, moveLeft, moveUpLeft, moveUpRight, moveDownLeft, moveDownRight);
-    }
+      allMoves.push(this.filterMoves(moveUp), this.filterMoves(moveDown), this.filterMoves(moveRight), this.filterMoves(moveLeft), this.filterMoves(moveUpLeft), this.filterMoves(moveDownLeft), this.filterMoves(moveUpRight), this.filterMoves(moveDownRight));
+      return allMoves}
 
 /*//zmodyfikowana metoda wyświetlająca wszystkie ruchy Hetmana bez kolizji z inną figurą
     allMoves(x, y, board) {
