@@ -169,6 +169,7 @@ export default class GameCtrl {
   }
 
   _displayMoves(figure) {
+
     // let moves = this._getMoves(figure);
     //podpiałem nowa dablice do wyświetlania ruchów oraz zmieniłem pozycje jednego z króli dla sprawdzenia pozycji
 
