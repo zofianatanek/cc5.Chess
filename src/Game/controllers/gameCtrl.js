@@ -23,7 +23,7 @@ export default class GameCtrl {
           this.doMove(squarePosition);
         } else {
           //nocastling
-          if(this.movePossibility){
+          if (this.movePossibility) {
             this.doMove(squarePosition);
           }
         }
@@ -39,7 +39,7 @@ export default class GameCtrl {
     const x = position[0];
     const y = position[1];
     const flag = this.turn;
-    
+
 
     const boardElement = this._boardModel[x][y] || null;
     console.log(boardElement);
@@ -53,8 +53,8 @@ export default class GameCtrl {
     flag === elementSide ? this.movePossibility = true : this.movePossibility = false;
 
     this._handleMark(boardElement);
-    
-   
+
+
   }
 
   //funkcja do filtorwania ruchów króla tak żeby nie mógł wejść na pola, na których będzie mógł być zbity przez przeciwnika
@@ -161,7 +161,9 @@ export default class GameCtrl {
       if (K1_matowany || K2_matowany) {
         let king;
         K2_matowany ? king = king_tab[1] : king = king_tab[0];
-        alert(txt + ` ${king._side} side  przegrał 1`);
+        if (king._side !== this.turn) {
+          alert(txt + ` ${king._side} side  przegrał 1`);
+        }
       }
       else if ((K1_moves.length <= 0 && K1_pionki <= 0) || (K2_moves <= 0 && K2_pionki <= 0)) {
         let king;
@@ -202,21 +204,21 @@ export default class GameCtrl {
 
   filterAllyBeating(possibleMoves, side) {
     return possibleMoves.filter(element => {
-      let moveX =  element[0];
+      let moveX = element[0];
       let moveY = element[1];
-      if (this._boardModel[moveX][moveY]){     //jesli jest figura
-        return (this._boardModel[moveX][moveY]._side!==side); // innego koloru? true; tego samego? false 
+      if (this._boardModel[moveX][moveY]) {     //jesli jest figura
+        return (this._boardModel[moveX][moveY]._side !== side); // innego koloru? true; tego samego? false 
       }
-      return true;      
+      return true;
     });
   }
 
-  doMove(squarePos){
+  doMove(squarePos) {
     const x = squarePos[0];  //pozycja x klikniecia
     const y = squarePos[1];  //pozycja y klikniecia
     const figX = this._markedFigure._x;  //pozycja x figury
     const figY = this._markedFigure._y;  //pozycja y figury
- 
+
 
     this._markedFigure._x = x;
     this._markedFigure._y = y;
@@ -224,12 +226,12 @@ export default class GameCtrl {
 
     this._boardModel[figX][figY] = null; //`${figX}, ${figY}`;
     this._boardModel[x][y] = this._markedFigure;
- 
-    
+
+
     this._boardView._displayPieces(this._boardModel);
     this.turn === 'white' ? this.turn = 'black' : this.turn = 'white'; //kolej białych czy czarnych
-    
-   
+
+
   }
   doCastling(cords, a) {
     let sign;
@@ -247,7 +249,7 @@ export default class GameCtrl {
     this._boardModel.init();
     this._boardView.init(this._boardModel);
     this._setListeners();
-    
+
 
     console.log(this._boardModel); // służy do podejrzenia tablicy w konsoli
   }
