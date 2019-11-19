@@ -8,36 +8,56 @@ class Rook extends Piece {
     this._vector = this._side == "white" ? -1 : 1; // 1 to góra -1 to dół
   }
 
-  // Filtrowanie ruchów wykraczających poza szachownice
 
-  findAllMoves(x, y) {
-    let up = [];
-    let down = [];
-    let left = [];
-    let right = [];
-    let allMoves = [];
-    for (let i = 1; i < 8; i++) {
-      up.push([x - i, y]);
-      down.push([x + i, y]);
-      left.push([x, y - i]);
-      right.push([x, y + i]);
+  collisions(availableMoves, board) {
+    const nonCollisionMoves = [];
+    for (let move of availableMoves) {
+        // console.log(move)
+        const x = move[0];
+        const y = move[1];
+        const side = this._side;
+        if (!board[x][y]) {
+          nonCollisionMoves.push(move);
+        } else if (board[x][y]._side !== side) {
+          nonCollisionMoves.push(move);
+            break;
+        } else {
+            break;
+        }
     }
-    return (allMoves = up.concat(down, left, right));
-  }
+    return nonCollisionMoves;
+}
 
   // Główna metoda, w której trzeba zapisać wszystkie możliwe ruchy danej bierki
   findLegalMoves(board) {
-    console.log(board);
     const x = this._x;
     const y = this._y;
-    let legalMoves = this.findAllMoves(x, y).filter(el => {
-      el[0] >= 0 && el[0] < 8 && el[1] >= 0 && el[1] < 8
-        ? (el = true)
-        : (el = false);
-      return el;
-    });
-    return legalMoves;
+    let allMoves = [];
+    const moves = {
+      up: [],
+      down: [],
+      left: [],
+      right: []
+    };
+
+    for (let i = 1; i < 8; i++) {
+        moves.up.push([x - i, y]);
+        moves.down.push([x + i, y]);
+        moves.left.push([x, y - i]);
+        moves.right.push([x, y + i]);
+    }
+
+    const legalMoves = move => move.every(el => el >= 0 && el < 8);
+
+    for (let nextMove in moves) {
+      moves[nextMove] = moves[nextMove].filter(legalMoves);
+      const possibleMove = this.collisions(moves[nextMove], board);
+      allMoves.push(...possibleMove);
+    }
+    const movesNow = allMoves.filter(legalMoves);
+    return movesNow;
   }
+
 }
 
 export default Rook;
