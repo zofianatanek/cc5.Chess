@@ -5,7 +5,6 @@ import Queen from "../pieces/queen";
 import Knight from "../pieces/knight";
 import Rook from "../pieces/rook";
 
-
 export default class Board extends Array {
   createSecondLevel() {
     for (let i = 0; i < 8; i++) {
@@ -41,6 +40,7 @@ export default class Board extends Array {
     for (let i = 0; i < this[row].length; i++) {
       this[row][i] = new Pawn(row, i, side);
     }
+    this[6][6] = new Pawn(6, 6, "black");
   }
 
   createAndSetRooks(side) {

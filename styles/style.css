@@ -79,8 +79,34 @@ body {
     color: var(--white-figures);
 }
 
-@media (max-width: 720px) {
+.promotion {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: calc(-65.3px * 6 / 2);
+    width: calc(65.3px * 6);
+    margin-top: -100px;
+    z-index: 2;
+    background: white;
+    padding: 50px;
+    font-size: 6.5vh;
+    display: flex;
+    justify-content: center;
+}
 
+.promotion.white {
+    background: var(--black);
+}
+
+.promotion.black {
+    background: rgba(188, 228, 235, 0.75);
+}
+
+.promotion > .fas {
+    padding: 20px;
+}
+
+@media (max-width: 720px) {
     .board {
         min-width: 70vh;
         min-height: 70vh;
@@ -92,7 +118,6 @@ body {
 }
 
 @media (max-width: 550px) {
-
     .board {
         min-width: 50vh;
         min-height: 50vh;
@@ -105,11 +130,9 @@ body {
     .wrap {
         height: 70vh;
     }
-
 }
 
 @media (max-width: 450px) {
-
     .board {
         min-width: 40vh;
         min-height: 40vh;
@@ -122,11 +145,9 @@ body {
     .wrap {
         height: 60vh;
     }
-
 }
 
 @media (max-width: 350px) {
-
     .board {
         min-width: 35vh;
         min-height: 35vh;
@@ -139,11 +160,9 @@ body {
     .wrap {
         height: 50vh;
     }
-
 }
 
 @media (max-width: 250px) {
-
     .board {
         min-width: 25vh;
         min-height: 25vh;
@@ -156,5 +175,4 @@ body {
     .wrap {
         height: 40vh;
     }
-
 }
