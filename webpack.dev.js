@@ -1,6 +1,8 @@
 const path = require("path");
+const common = require("./webpack.common");
+const merge = require("webpack-merge");
 
-module.exports = {
+module.exports = merge(common, {
   mode: "development",
   entry: "./src/main.js",
   output: {
@@ -11,13 +13,4 @@ module.exports = {
     extensions: [".js"]
   },
   devtool: "source-map",
-  module: {
-    rules: [
-      {
-        test: /\.(js)$/,
-        loaders: ["babel-loader"],
-        exclude: /node_modules/
-      }
-    ]
-  }
-};
+});
