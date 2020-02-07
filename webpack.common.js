@@ -5,6 +5,10 @@ module.exports = {
   resolve: {
     extensions: [".js"]
   },
+  output: {
+    path: path.resolve(__dirname),
+    filename: "dist/index.js"
+  },
   devtool: "source-map",
   module: {
     rules: [
